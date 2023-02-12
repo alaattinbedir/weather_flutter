@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:weather_flutter/data/controller/weather_controller.dart';
+import 'package:weather_flutter/presentation/weather_controller.dart';
 
 class WeatherPage extends StatelessWidget {
   final controller = WeatherController();
