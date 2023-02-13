@@ -59,7 +59,7 @@ class WeatherPage extends GetWidget<WeatherController> {
                 height: 150,
                 child: ListView.separated(
                   scrollDirection: Axis.horizontal,
-                  padding: const EdgeInsets.all(5),
+                  padding: const EdgeInsets.all(8),
                   itemCount: controller.hourlyList.length,
                   separatorBuilder: (context, index) {
                     return const SizedBox(
