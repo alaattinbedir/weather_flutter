@@ -18,7 +18,8 @@ class WeatherPage extends GetWidget<WeatherController> {
           ),
         ),
         child: SafeArea(
-          child: Column(
+            child: Obx(
+          () => Column(
             children: [
               const SizedBox(
                 height: 10,
@@ -32,58 +33,58 @@ class WeatherPage extends GetWidget<WeatherController> {
                 height: 20,
                 width: double.infinity,
               ),
-              Obx(() => Text(
-                    '${controller.weatherType}',
-                    style: const TextStyle(color: Colors.white),
-                  )),
+              Text(
+                '${controller.weatherType}',
+                style: const TextStyle(color: Colors.white),
+              ),
               const SizedBox(
                 height: 30,
               ),
               Image.asset('assets/images/partly_sunny.png'),
-              Obx(() => Text(
-                    '${controller.currentCityTemp}',
-                    style: const TextStyle(color: Colors.white),
-                  )),
+              Text(
+                '${controller.currentCityTemp}',
+                style: const TextStyle(color: Colors.white),
+              ),
               const SizedBox(
                 height: 20,
               ),
-              Obx(() => Text(
-                    '${controller.currentDate}',
-                    style: const TextStyle(color: Colors.white),
-                  )),
+              Text(
+                '${controller.currentDate}',
+                style: const TextStyle(color: Colors.white),
+              ),
               const SizedBox(
                 height: 20,
               ),
-              Obx(() => SizedBox(
-                    height: 150,
-                    child: ListView.separated(
-                      scrollDirection: Axis.horizontal,
-                      padding: const EdgeInsets.all(5),
-                      itemCount: controller.hourlyList.length,
-                      separatorBuilder: (context, index) {
-                        return const SizedBox(
-                          width: 2,
-                        );
-                      },
-                      itemBuilder: (context, index) {
-                        return buildCard(index);
-                      },
-                    ),
-                  )),
-              Obx(() => Expanded(
-                    child: SizedBox(
-                      height: double.infinity,
-                      child: ListView.builder(
-                          padding: const EdgeInsets.all(8),
-                          itemCount: controller.dailyList.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            return buildCell(index);
-                          }),
-                    ),
-                  )),
+              SizedBox(
+                height: 150,
+                child: ListView.separated(
+                  scrollDirection: Axis.horizontal,
+                  padding: const EdgeInsets.all(5),
+                  itemCount: controller.hourlyList.length,
+                  separatorBuilder: (context, index) {
+                    return const SizedBox(
+                      width: 2,
+                    );
+                  },
+                  itemBuilder: (context, index) {
+                    return buildCard(index);
+                  },
+                ),
+              ),
+              Expanded(
+                child: SizedBox(
+                  height: double.infinity,
+                  child: ListView.builder(
+                      padding: const EdgeInsets.all(8),
+                      itemCount: controller.dailyList.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return buildCell(index);
+                      }),
+                ),
+              ),
             ],
           ),
-        ),
+        )),
       ),
     );
   }
