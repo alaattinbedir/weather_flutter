@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:weather_flutter/app/base/base_controller.dart';
+import 'package:weather_flutter/app/helper/utility.dart';
 import 'package:weather_flutter/data/service/base_client.dart';
 import 'package:weather_flutter/data/model/weather.dart';
 import 'package:weather_flutter/data/service/app_exceptions.dart';
@@ -31,6 +32,8 @@ class WeatherController extends GetxController with BaseController {
 
     if (response == null) return;
     final weather = weatherFromJson(response);
+    Utility().singletonPrint();
+
     dailyList.value = weather.daily.data;
     hourlyList.value = weather.hourly.data;
     weatherType.value = weather.currently.summary.toString();
