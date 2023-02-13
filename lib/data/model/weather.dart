@@ -86,7 +86,7 @@ class Currently {
   factory Currently.fromJson(Map<String, dynamic> json) => Currently(
         time: json["time"],
         summary: summaryValues.map[json["summary"]],
-        icon: iconValues.map[json["icon"]]!,
+        icon: iconValues.map[json["icon"]],
         precipIntensity: json["precipIntensity"],
         precipProbability: json["precipProbability"],
         temperature: json["temperature"]?.toDouble(),
@@ -126,8 +126,7 @@ class Currently {
 
 enum Icon { clearNight, clearDay }
 
-final iconValues =
-    EnumValues({"clear-day": Icon.clearDay, "clear-night": Icon.clearNight});
+final iconValues = EnumValues({"clear-day": Icon.clearDay, "clear-night": Icon.clearNight});
 
 enum Summary { clear }
 
@@ -329,14 +328,13 @@ class Hourly {
   });
 
   String summary;
-  Icon icon;
+  Icon? icon;
   List<Currently> data;
 
   factory Hourly.fromJson(Map<String, dynamic> json) => Hourly(
         summary: json["summary"],
-        icon: iconValues.map[json["icon"]]!,
-        data: List<Currently>.from(
-            json["data"].map((x) => Currently.fromJson(x))),
+        icon: iconValues.map[json["icon"]],
+        data: List<Currently>.from(json["data"].map((x) => Currently.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {

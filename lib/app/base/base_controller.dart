@@ -1,4 +1,4 @@
-import 'package:weather_flutter/common/helper/dialog_helper.dart';
+import 'package:weather_flutter/app/helper/dialog_helper.dart';
 import 'package:weather_flutter/data/service/app_exceptions.dart';
 
 class BaseController {
