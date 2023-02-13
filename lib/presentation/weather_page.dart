@@ -72,15 +72,12 @@ class WeatherPage extends GetWidget<WeatherController> {
                 ),
               ),
               Expanded(
-                child: SizedBox(
-                  height: double.infinity,
-                  child: ListView.builder(
-                      padding: const EdgeInsets.all(8),
-                      itemCount: controller.dailyList.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        return buildCell(index);
-                      }),
-                ),
+                child: ListView.builder(
+                    padding: const EdgeInsets.all(8),
+                    itemCount: controller.dailyList.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return buildCell(index);
+                    }),
               ),
             ],
           ),
