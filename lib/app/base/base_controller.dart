@@ -1,4 +1,6 @@
-import 'package:weather_flutter/app/helper/dialog_helper.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:weather_flutter/app/helper/dialogs.dart';
 import 'package:weather_flutter/data/service/app_exceptions.dart';
 
 class BaseController {
@@ -6,20 +8,20 @@ class BaseController {
     hideLoading();
     if (error is BadRequestException) {
       var message = error.message;
-      DialogHelper.showErroDialog(description: message);
+      Dialogs().showErroDialog(description: message);
     } else if (error is FetchDataException) {
       var message = error.message;
-      DialogHelper.showErroDialog(description: message);
+      Dialogs().showErroDialog(description: message);
     } else if (error is ApiNotRespondingException) {
-      DialogHelper.showErroDialog(description: 'Oops! It took longer to respond.');
+      Dialogs().showErroDialog(description: 'Oops! It took longer to respond.');
     }
   }
 
-  showLoading([String? message]) {
-    DialogHelper.showLoading(message);
-  }
+  // showLoading([String? message]) {
+  //   Dialogs().showLoading(message);
+  // }
 
   hideLoading() {
-    DialogHelper.hideLoading();
+    Dialogs().hideLoading();
   }
 }

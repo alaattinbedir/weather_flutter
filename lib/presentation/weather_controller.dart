@@ -8,7 +8,7 @@ import 'package:weather_flutter/app/helper/utility.dart';
 import 'package:weather_flutter/data/service/base_client.dart';
 import 'package:weather_flutter/data/model/weather.dart';
 import 'package:weather_flutter/data/service/app_exceptions.dart';
-import 'package:weather_flutter/app/helper/dialog_helper.dart';
+import 'package:weather_flutter/app/helper/dialogs.dart';
 
 class WeatherController extends GetxController with BaseController {
   var dailyList = <Datum>[].obs; //Currently
@@ -21,41 +21,44 @@ class WeatherController extends GetxController with BaseController {
   @override
   void onInit() {
     SystemChrome.setEnabledSystemUIOverlays([]);
+    // Get.put(const Dialog());
+    // Get.lazyPut(() => Dialogs());
+
     getData();
     super.onInit();
   }
 
   void getData() async {
-    // showLoading('fetching data');
+    Get.find<Dialog>();
+    // Dialogs().showLoading('Loading');
+    // showLoading('loading');
     var response = await BaseClient().get('/41.3874,2.1686', contentType: MimeType.applicationJson.name);
-    // hideLoading();
 
     if (response == null) return;
     final weather = weatherFromJson(response);
-    Utility().singletonPrint();
 
     dailyList.value = weather.daily.data;
     hourlyList.value = weather.hourly.data;
     weatherType.value = weather.currently.summary.toString();
-    currentCityTemp.value = weather.currently.temperature.toString();
-    currentDate.value = weather.currently.time.toString();
+    currentCityTemp.value = Utility().convertFahrenheitToCelsiusAsString(weather.currently.temperature);
+    currentDate.value = Utility().getFormatedDate(weather.currently.time);
 
     debugPrint('Weather count: ${weather.daily.data.length}');
   }
 
   void postData() async {
     var payLoad = {'message': 'CodeX sucks!!!'};
-    showLoading('Posting data...');
+
     var response = await BaseClient().post('/41.3874,2.1686', payloadObj: payLoad).catchError((error) {
       if (error is BadRequestException) {
         var apiError = json.decode(error.message!);
-        DialogHelper.showErroDialog(description: apiError["reason"]);
+        Dialogs().showErroDialog(description: apiError["reason"]);
       } else {
         handleError(error);
       }
     });
     if (response == null) return;
-    hideLoading();
+
     debugPrint(response);
   }
 }

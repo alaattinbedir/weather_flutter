@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class DialogHelper {
+class Dialogs {
+  static final Dialogs _singleton = Dialogs._internal();
+
+  factory Dialogs() {
+    return _singleton;
+  }
+
+  Dialogs._internal();
+
   //show error dialog
-  static void showErroDialog(
-      {String title = 'Error', String? description = 'Something went wrong'}) {
+  void showErroDialog({String title = 'Error', String? description = 'Something went wrong'}) {
     Get.dialog(
       Dialog(
         child: Padding(
@@ -36,7 +43,7 @@ class DialogHelper {
   //show toast
   //show snack bar
   //show loading
-  static void showLoading([String? message]) {
+  void showLoading([String? message]) {
     Get.dialog(
       Dialog(
         child: Padding(
@@ -55,7 +62,7 @@ class DialogHelper {
   }
 
   //hide loading
-  static void hideLoading() {
+  void hideLoading() {
     if (Get.isDialogOpen!) Get.back();
   }
 }
