@@ -14,6 +14,7 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       title: 'Weather Today',
       theme: ThemeData(
+        fontFamily: 'Montserrat',
         primarySwatch: Colors.orange,
       ),
       debugShowCheckedModeBanner: false,

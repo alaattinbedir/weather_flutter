@@ -21,17 +21,12 @@ class WeatherController extends GetxController with BaseController {
   @override
   void onInit() {
     SystemChrome.setEnabledSystemUIOverlays([]);
-    // Get.put(const Dialog());
-    // Get.lazyPut(() => Dialogs());
 
     getData();
     super.onInit();
   }
 
   void getData() async {
-    Get.find<Dialog>();
-    // Dialogs().showLoading('Loading');
-    // showLoading('loading');
     var response = await BaseClient().get('/41.3874,2.1686', contentType: MimeType.applicationJson.name);
 
     if (response == null) return;
@@ -39,7 +34,7 @@ class WeatherController extends GetxController with BaseController {
 
     dailyList.value = weather.daily.data;
     hourlyList.value = weather.hourly.data;
-    weatherType.value = weather.currently.summary.toString();
+    weatherType.value = weather.currently.summary == null ? 'Clear' : weather.currently.summary.toString();
     currentCityTemp.value = Utility().convertFahrenheitToCelsiusAsString(weather.currently.temperature);
     currentDate.value = Utility().getFormatedDate(weather.currently.time);
 

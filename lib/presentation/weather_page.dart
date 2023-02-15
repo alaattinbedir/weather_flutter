@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:weather_flutter/app/helper/utility.dart';
 import 'package:weather_flutter/presentation/weather_controller.dart';
 
 class WeatherPage extends GetWidget<WeatherController> {
@@ -21,53 +22,70 @@ class WeatherPage extends GetWidget<WeatherController> {
             child: Obx(
           () => Column(
             children: [
-              const SizedBox(
-                height: 10,
-                width: double.infinity,
-              ),
               Text(
                 '${controller.cityName}',
-                style: const TextStyle(color: Colors.white),
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 30.0,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
               const SizedBox(
-                height: 20,
+                height: 15,
                 width: double.infinity,
               ),
               Text(
                 '${controller.weatherType}',
-                style: const TextStyle(color: Colors.white),
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 20.0,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
               const SizedBox(
-                height: 30,
+                height: 18,
               ),
-              Image.asset('assets/images/partly_sunny.png'),
+              Image.asset(
+                'assets/images/partly_sunny.png',
+                width: 100,
+                height: 100,
+                fit: BoxFit.fitWidth,
+              ),
               Text(
                 '${controller.currentCityTemp}',
-                style: const TextStyle(color: Colors.white),
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 65.0,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
               const SizedBox(
-                height: 20,
+                height: 5,
               ),
               Text(
                 '${controller.currentDate}',
-                style: const TextStyle(color: Colors.white),
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 23.0,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
               const SizedBox(
                 height: 20,
               ),
               SizedBox(
-                height: 150,
+                height: 120,
                 child: ListView.separated(
                   scrollDirection: Axis.horizontal,
                   padding: const EdgeInsets.all(8),
                   itemCount: controller.hourlyList.length,
                   separatorBuilder: (context, index) {
                     return const SizedBox(
-                      width: 2,
+                      width: 5,
                     );
                   },
                   itemBuilder: (context, index) {
-                    return buildCard(index);
+                    return buildHorlyCell(index);
                   },
                 ),
               ),
@@ -76,7 +94,7 @@ class WeatherPage extends GetWidget<WeatherController> {
                     padding: const EdgeInsets.all(8),
                     itemCount: controller.dailyList.length,
                     itemBuilder: (BuildContext context, int index) {
-                      return buildCell(index);
+                      return buildDailyCell(index);
                     }),
               ),
             ],
@@ -86,16 +104,93 @@ class WeatherPage extends GetWidget<WeatherController> {
     );
   }
 
-  Widget buildCard(int index) => Container(
-        color: Colors.white,
-        width: 100,
-        height: 150,
-        child: Center(child: Text('$index')),
+  Widget buildHorlyCell(int index) => Container(
+        color: Colors.transparent,
+        width: 55,
+        height: 120,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Text(
+              Utility().getHourFromDate(controller.hourlyList[index].time),
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 15.0,
+                fontWeight: FontWeight.w400,
+              ),
+            ),
+            const SizedBox(
+              height: 5,
+            ),
+            Image.asset(
+              'assets/images/partly_sunny.png',
+              width: 40,
+              height: 30,
+              fit: BoxFit.fitWidth,
+            ),
+            const SizedBox(
+              height: 5,
+            ),
+            Text(
+              Utility().convertFahrenheitToCelsiusAsString(controller.hourlyList[index].temperature),
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 15.0,
+                fontWeight: FontWeight.w400,
+              ),
+            ),
+          ],
+        ),
       );
 
-  Widget buildCell(int index) => Container(
-        color: Colors.white,
-        height: 50,
-        child: Center(child: Text('$index')),
+  Widget buildDailyCell(int index) => Container(
+        color: Colors.transparent,
+        height: 55,
+        child: Row(
+          children: [
+            const SizedBox(
+              width: 15,
+            ),
+            SizedBox(
+              width: 90,
+              child: Text(
+                Utility().getDayFromDate(controller.dailyList[index].time),
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 15.0,
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
+            ),
+            const Spacer(),
+            Image.asset(
+              'assets/images/partly_sunny.png',
+              width: 40,
+              height: 30,
+              fit: BoxFit.fitWidth,
+            ),
+            const Spacer(),
+            Text(
+              Utility().convertFahrenheitToCelsiusAsString(controller.dailyList[index].apparentTemperatureHigh),
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 15.0,
+                fontWeight: FontWeight.w400,
+              ),
+            ),
+            const SizedBox(
+              width: 15,
+            ),
+            Text(
+              Utility().convertFahrenheitToCelsiusAsString(controller.dailyList[index].temperatureHigh),
+              style: const TextStyle(
+                color: Colors.grey,
+                fontSize: 15.0,
+                fontWeight: FontWeight.w400,
+              ),
+            ),
+          ],
+        ),
       );
 }
