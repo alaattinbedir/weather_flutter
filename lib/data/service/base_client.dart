@@ -29,7 +29,7 @@ class BaseClient {
 
     try {
       var response = await client.get(uri, headers: allHeaders).timeout(const Duration(seconds: timeOutDuration));
-      return handleResponse(response);
+      return _handleResponse(response);
     } on SocketException {
       throw FetchDataException('No Internet connection', uri.toString());
     } on TimeoutException {
@@ -45,7 +45,7 @@ class BaseClient {
 
     try {
       var response = await client.post(uri, body: payload, headers: allHeaders).timeout(const Duration(seconds: timeOutDuration));
-      return handleResponse(response);
+      return _handleResponse(response);
     } on SocketException {
       throw FetchDataException('No Internet connection', uri.toString());
     } on TimeoutException {
@@ -62,11 +62,9 @@ class BaseClient {
     return allHeaderFields;
   }
 
-  dynamic handleResponse(http.Response response) {
+  dynamic _handleResponse(http.Response response) {
     switch (response.statusCode) {
       case 200:
-        var responseJson = utf8.decode(response.bodyBytes);
-        return responseJson;
       case 201:
         var responseJson = utf8.decode(response.bodyBytes);
         return responseJson;
