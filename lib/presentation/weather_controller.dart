@@ -20,7 +20,7 @@ class WeatherController extends GetxController with BaseController {
 
   @override
   void onInit() {
-    SystemChrome.setEnabledSystemUIOverlays([]);
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
 
     getData();
     super.onInit();
