@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:weather_flutter/app/helper/dialogs.dart';
 import 'package:weather_flutter/data/service/app_exceptions.dart';
 
@@ -17,9 +15,9 @@ class BaseController {
     }
   }
 
-  // showLoading([String? message]) {
-  //   Dialogs().showLoading(message);
-  // }
+  showLoading([String? message]) {
+    Dialogs().showLoading(message);
+  }
 
   hideLoading() {
     Dialogs().hideLoading();

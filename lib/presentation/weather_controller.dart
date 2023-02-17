@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -7,11 +5,9 @@ import 'package:weather_flutter/app/base/base_controller.dart';
 import 'package:weather_flutter/app/helper/utility.dart';
 import 'package:weather_flutter/data/service/base_client.dart';
 import 'package:weather_flutter/data/model/weather.dart';
-import 'package:weather_flutter/data/service/app_exceptions.dart';
-import 'package:weather_flutter/app/helper/dialogs.dart';
 
 class WeatherController extends GetxController with BaseController {
-  var dailyList = <Datum>[].obs; //Currently
+  var dailyList = <Datum>[].obs;
   var hourlyList = <Currently>[].obs;
   var weatherType = ''.obs;
   var currentCityTemp = ''.obs;
@@ -37,22 +33,6 @@ class WeatherController extends GetxController with BaseController {
     weatherType.value = weather.currently.summary == null ? 'Clear' : weather.currently.summary.toString();
     currentCityTemp.value = Utility().convertFahrenheitToCelsiusAsString(weather.currently.temperature);
     currentDate.value = Utility().getFormatedDate(weather.currently.time);
-
-    debugPrint('Weather count: ${weather.daily.data.length}');
-  }
-
-  void postData() async {
-    var payLoad = {'message': 'CodeX sucks!!!'};
-
-    var response = await BaseClient().post('/41.3874,2.1686', payloadObj: payLoad).catchError((error) {
-      if (error is BadRequestException) {
-        var apiError = json.decode(error.message!);
-        Dialogs().showErroDialog(description: apiError["reason"]);
-      } else {
-        handleError(error);
-      }
-    });
-    if (response == null) return;
 
     debugPrint(response);
   }
