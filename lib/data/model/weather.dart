@@ -68,7 +68,7 @@ class Currently {
   int time;
   Summary? summary;
   Icon? icon;
-  int precipIntensity;
+  num precipIntensity;
   int precipProbability;
   double temperature;
   double apparentTemperature;
