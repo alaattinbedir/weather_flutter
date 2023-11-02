@@ -7,8 +7,8 @@ import 'package:weather_flutter/data/service/base_client.dart';
 import 'package:weather_flutter/data/model/weather.dart';
 
 class WeatherController extends GetxController with BaseController {
-  var dailyList = <Datum>[].obs;
-  var hourlyList = <Currently>[].obs;
+  var dailyList = <Daily>[].obs;
+  var hourlyList = <Current>[].obs;
   var weatherType = ''.obs;
   var currentCityTemp = ''.obs;
   var currentDate = ''.obs;
@@ -23,16 +23,17 @@ class WeatherController extends GetxController with BaseController {
   }
 
   void getData() async {
-    var response = await BaseClient().get('/41.3874,2.1686', contentType: MimeType.applicationJson.name);
+    var response = await BaseClient().get('onecall?lat=41.3874&lon=2.1686&exclude=minutely,alert&appid=b6dd3cedb673897c7f68486a9b40b7a3&units=metric',
+        contentType: MimeType.applicationJson.name);
 
     if (response == null) return;
     final weather = weatherFromJson(response);
 
-    dailyList.value = weather.daily.data;
-    hourlyList.value = weather.hourly.data;
-    weatherType.value = weather.currently.summary == null ? 'Clear' : weather.currently.summary.toString();
-    currentCityTemp.value = Utility().convertFahrenheitToCelsiusAsString(weather.currently.temperature);
-    currentDate.value = Utility().getFormatedDate(weather.currently.time);
+    dailyList.value = weather.daily;
+    hourlyList.value = weather.hourly;
+    weatherType.value = weather.current.weather[0].description.name;
+    currentCityTemp.value = Utility().convertFahrenheitToCelsiusAsString(weather.current.temp);
+    currentDate.value = Utility().getFormatedDate(weather.current.dt);
 
     debugPrint(response);
   }

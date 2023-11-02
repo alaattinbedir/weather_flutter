@@ -4,7 +4,7 @@ import 'dart:io';
 import 'app_exceptions.dart';
 import 'package:http/http.dart' as http;
 
-const String baseUrl = 'https://api.darksky.net/forecast/2bb07c3bece89caf533ac9a5d23d8417';
+const String baseUrl = 'https://api.openweathermap.org/data/2.5/';
 
 enum MimeType {
   applicationJson("application/json"),

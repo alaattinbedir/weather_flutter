@@ -113,7 +113,7 @@ class WeatherPage extends GetWidget<WeatherController> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Text(
-              Utility().getHourFromDate(controller.hourlyList[index].time),
+              Utility().getHourFromDate(controller.hourlyList[index].dt),
               style: const TextStyle(
                 color: Colors.white,
                 fontSize: 15.0,
@@ -133,7 +133,7 @@ class WeatherPage extends GetWidget<WeatherController> {
               height: 5,
             ),
             Text(
-              Utility().convertFahrenheitToCelsiusAsString(controller.hourlyList[index].temperature),
+              Utility().convertFahrenheitToCelsiusAsString(controller.hourlyList[index].temp),
               style: const TextStyle(
                 color: Colors.white,
                 fontSize: 15.0,
@@ -146,7 +146,7 @@ class WeatherPage extends GetWidget<WeatherController> {
 
   Widget buildDailyCell(int index) => Container(
         color: Colors.transparent,
-        height: 55,
+        height: 50,
         child: Row(
           children: [
             const SizedBox(
@@ -155,7 +155,7 @@ class WeatherPage extends GetWidget<WeatherController> {
             SizedBox(
               width: 90,
               child: Text(
-                Utility().getDayFromDate(controller.dailyList[index].time),
+                Utility().getDayFromDate(controller.dailyList[index].dt),
                 style: const TextStyle(
                   color: Colors.white,
                   fontSize: 15.0,
@@ -172,7 +172,7 @@ class WeatherPage extends GetWidget<WeatherController> {
             ),
             const Spacer(),
             Text(
-              Utility().convertFahrenheitToCelsiusAsString(controller.dailyList[index].apparentTemperatureHigh),
+              Utility().convertFahrenheitToCelsiusAsString(controller.dailyList[index].temp.min),
               style: const TextStyle(
                 color: Colors.white,
                 fontSize: 15.0,
@@ -183,7 +183,7 @@ class WeatherPage extends GetWidget<WeatherController> {
               width: 15,
             ),
             Text(
-              Utility().convertFahrenheitToCelsiusAsString(controller.dailyList[index].temperatureHigh),
+              Utility().convertFahrenheitToCelsiusAsString(controller.dailyList[index].temp.max),
               style: const TextStyle(
                 color: Colors.grey,
                 fontSize: 15.0,

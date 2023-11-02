@@ -9,338 +9,373 @@ Weather weatherFromJson(String str) => Weather.fromJson(json.decode(str));
 String weatherToJson(Weather data) => json.encode(data.toJson());
 
 class Weather {
-  Weather({
-    required this.latitude,
-    required this.longitude,
-    required this.timezone,
-    required this.currently,
-    required this.hourly,
-    required this.daily,
-  });
-
-  double latitude;
-  double longitude;
+  List<Current> hourly;
+  List<Alert> alerts;
+  Current current;
+  int timezoneOffset;
+  List<Daily> daily;
+  double lon;
   String timezone;
-  Currently currently;
-  Hourly hourly;
-  Daily daily;
+  double lat;
+
+  Weather({
+    required this.hourly,
+    required this.alerts,
+    required this.current,
+    required this.timezoneOffset,
+    required this.daily,
+    required this.lon,
+    required this.timezone,
+    required this.lat,
+  });
 
   factory Weather.fromJson(Map<String, dynamic> json) => Weather(
-        latitude: json["latitude"]?.toDouble(),
-        longitude: json["longitude"]?.toDouble(),
+        hourly: List<Current>.from(json["hourly"].map((x) => Current.fromJson(x))),
+        alerts: List<Alert>.from(json["alerts"].map((x) => Alert.fromJson(x))),
+        current: Current.fromJson(json["current"]),
+        timezoneOffset: json["timezone_offset"],
+        daily: List<Daily>.from(json["daily"].map((x) => Daily.fromJson(x))),
+        lon: json["lon"]?.toDouble(),
         timezone: json["timezone"],
-        currently: Currently.fromJson(json["currently"]),
-        hourly: Hourly.fromJson(json["hourly"]),
-        daily: Daily.fromJson(json["daily"]),
+        lat: json["lat"]?.toDouble(),
       );
 
   Map<String, dynamic> toJson() => {
-        "latitude": latitude,
-        "longitude": longitude,
+        "hourly": List<dynamic>.from(hourly.map((x) => x.toJson())),
+        "alerts": List<dynamic>.from(alerts.map((x) => x.toJson())),
+        "current": current.toJson(),
+        "timezone_offset": timezoneOffset,
+        "daily": List<dynamic>.from(daily.map((x) => x.toJson())),
+        "lon": lon,
         "timezone": timezone,
-        "currently": currently.toJson(),
-        "hourly": hourly.toJson(),
-        "daily": daily.toJson(),
+        "lat": lat,
       };
 }
 
-class Currently {
-  Currently({
-    required this.time,
-    required this.summary,
-    required this.icon,
-    required this.precipIntensity,
-    required this.precipProbability,
-    required this.temperature,
-    required this.apparentTemperature,
-    required this.dewPoint,
-    required this.humidity,
-    required this.pressure,
-    required this.windSpeed,
-    required this.windGust,
-    required this.windBearing,
-    required this.cloudCover,
-    required this.uvIndex,
-    required this.visibility,
-    required this.ozone,
+class Alert {
+  String senderName;
+  List<String> tags;
+  int end;
+  String event;
+  String description;
+  int start;
+
+  Alert({
+    required this.senderName,
+    required this.tags,
+    required this.end,
+    required this.event,
+    required this.description,
+    required this.start,
   });
 
-  int time;
-  Summary? summary;
-  Icon? icon;
-  num precipIntensity;
-  num precipProbability;
-  double temperature;
-  double apparentTemperature;
-  double dewPoint;
-  double humidity;
-  double pressure;
-  double windSpeed;
-  double windGust;
-  int windBearing;
-  double cloudCover;
-  int uvIndex;
-  int visibility;
-  double ozone;
-
-  factory Currently.fromJson(Map<String, dynamic> json) => Currently(
-        time: json["time"],
-        summary: summaryValues.map[json["summary"]],
-        icon: iconValues.map[json["icon"]],
-        precipIntensity: json["precipIntensity"],
-        precipProbability: json["precipProbability"],
-        temperature: json["temperature"]?.toDouble(),
-        apparentTemperature: json["apparentTemperature"]?.toDouble(),
-        dewPoint: json["dewPoint"]?.toDouble(),
-        humidity: json["humidity"]?.toDouble(),
-        pressure: json["pressure"]?.toDouble(),
-        windSpeed: json["windSpeed"]?.toDouble(),
-        windGust: json["windGust"]?.toDouble(),
-        windBearing: json["windBearing"],
-        cloudCover: json["cloudCover"]?.toDouble(),
-        uvIndex: json["uvIndex"],
-        visibility: json["visibility"],
-        ozone: json["ozone"]?.toDouble(),
+  factory Alert.fromJson(Map<String, dynamic> json) => Alert(
+        senderName: json["sender_name"],
+        tags: List<String>.from(json["tags"].map((x) => x)),
+        end: json["end"],
+        event: json["event"],
+        description: json["description"],
+        start: json["start"],
       );
 
   Map<String, dynamic> toJson() => {
-        "time": time,
-        "summary": summaryValues.reverse[summary],
-        "icon": iconValues.reverse[icon],
-        "precipIntensity": precipIntensity,
-        "precipProbability": precipProbability,
-        "temperature": temperature,
-        "apparentTemperature": apparentTemperature,
-        "dewPoint": dewPoint,
-        "humidity": humidity,
-        "pressure": pressure,
-        "windSpeed": windSpeed,
-        "windGust": windGust,
-        "windBearing": windBearing,
-        "cloudCover": cloudCover,
-        "uvIndex": uvIndex,
-        "visibility": visibility,
-        "ozone": ozone,
+        "sender_name": senderName,
+        "tags": List<dynamic>.from(tags.map((x) => x)),
+        "end": end,
+        "event": event,
+        "description": description,
+        "start": start,
       };
 }
 
-enum Icon { clearNight, clearDay }
+class Current {
+  int dt;
+  double temp;
+  int humidity;
+  int? sunrise;
+  int? sunset;
+  double uvi;
+  int windDeg;
+  List<WeatherElement> weather;
+  double feelsLike;
+  int clouds;
+  int visibility;
+  double windSpeed;
+  int pressure;
+  double dewPoint;
+  Rain? rain;
+  double? windGust;
+  double? pop;
 
-final iconValues = EnumValues({"clear-day": Icon.clearDay, "clear-night": Icon.clearNight});
+  Current({
+    required this.dt,
+    required this.temp,
+    required this.humidity,
+    this.sunrise,
+    this.sunset,
+    required this.uvi,
+    required this.windDeg,
+    required this.weather,
+    required this.feelsLike,
+    required this.clouds,
+    required this.visibility,
+    required this.windSpeed,
+    required this.pressure,
+    required this.dewPoint,
+    this.rain,
+    this.windGust,
+    this.pop,
+  });
 
-enum Summary { clear }
+  factory Current.fromJson(Map<String, dynamic> json) => Current(
+        dt: json["dt"],
+        temp: json["temp"]?.toDouble(),
+        humidity: json["humidity"],
+        sunrise: json["sunrise"],
+        sunset: json["sunset"],
+        uvi: json["uvi"]?.toDouble(),
+        windDeg: json["wind_deg"],
+        weather: List<WeatherElement>.from(json["weather"].map((x) => WeatherElement.fromJson(x))),
+        feelsLike: json["feels_like"]?.toDouble(),
+        clouds: json["clouds"],
+        visibility: json["visibility"],
+        windSpeed: json["wind_speed"]?.toDouble(),
+        pressure: json["pressure"],
+        dewPoint: json["dew_point"]?.toDouble(),
+        rain: json["rain"] == null ? null : Rain.fromJson(json["rain"]),
+        windGust: json["wind_gust"]?.toDouble(),
+        pop: json["pop"]?.toDouble(),
+      );
 
-final summaryValues = EnumValues({"clear": Summary.clear});
+  Map<String, dynamic> toJson() => {
+        "dt": dt,
+        "temp": temp,
+        "humidity": humidity,
+        "sunrise": sunrise,
+        "sunset": sunset,
+        "uvi": uvi,
+        "wind_deg": windDeg,
+        "weather": List<dynamic>.from(weather.map((x) => x.toJson())),
+        "feels_like": feelsLike,
+        "clouds": clouds,
+        "visibility": visibility,
+        "wind_speed": windSpeed,
+        "pressure": pressure,
+        "dew_point": dewPoint,
+        "rain": rain?.toJson(),
+        "wind_gust": windGust,
+        "pop": pop,
+      };
+}
+
+class Rain {
+  double the1H;
+
+  Rain({
+    required this.the1H,
+  });
+
+  factory Rain.fromJson(Map<String, dynamic> json) => Rain(
+        the1H: json["1h"]?.toDouble(),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "1h": the1H,
+      };
+}
+
+class WeatherElement {
+  int id;
+  Main main;
+  String icon;
+  Description description;
+
+  WeatherElement({
+    required this.id,
+    required this.main,
+    required this.icon,
+    required this.description,
+  });
+
+  factory WeatherElement.fromJson(Map<String, dynamic> json) => WeatherElement(
+        id: json["id"],
+        main: mainValues.map[json["main"]]!,
+        icon: json["icon"],
+        description: descriptionValues.map[json["description"]]!,
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "main": mainValues.reverse[main],
+        "icon": icon,
+        "description": descriptionValues.reverse[description],
+      };
+}
+
+enum Description { BROKEN_CLOUDS, CLEAR_SKY, FEW_CLOUDS, LIGHT_RAIN, OVERCAST_CLOUDS, SCATTERED_CLOUDS }
+
+final descriptionValues = EnumValues({
+  "broken clouds": Description.BROKEN_CLOUDS,
+  "clear sky": Description.CLEAR_SKY,
+  "few clouds": Description.FEW_CLOUDS,
+  "light rain": Description.LIGHT_RAIN,
+  "overcast clouds": Description.OVERCAST_CLOUDS,
+  "scattered clouds": Description.SCATTERED_CLOUDS
+});
+
+enum Main { CLEAR, CLOUDS, RAIN }
+
+final mainValues = EnumValues({"Clear": Main.CLEAR, "Clouds": Main.CLOUDS, "Rain": Main.RAIN});
 
 class Daily {
-  Daily({
-    required this.summary,
-    required this.icon,
-    required this.data,
-  });
+  double pop;
+  double? rain;
+  int dt;
+  Temp temp;
+  int humidity;
+  int sunrise;
+  int sunset;
+  double uvi;
+  double moonPhase;
+  int windDeg;
+  double windGust;
+  int moonset;
+  FeelsLike feelsLike;
+  List<WeatherElement> weather;
+  double windSpeed;
+  int pressure;
+  int moonrise;
+  double dewPoint;
+  int clouds;
 
-  String summary;
-  Icon? icon;
-  List<Datum> data;
+  Daily({
+    required this.pop,
+    this.rain,
+    required this.dt,
+    required this.temp,
+    required this.humidity,
+    required this.sunrise,
+    required this.sunset,
+    required this.uvi,
+    required this.moonPhase,
+    required this.windDeg,
+    required this.windGust,
+    required this.moonset,
+    required this.feelsLike,
+    required this.weather,
+    required this.windSpeed,
+    required this.pressure,
+    required this.moonrise,
+    required this.dewPoint,
+    required this.clouds,
+  });
 
   factory Daily.fromJson(Map<String, dynamic> json) => Daily(
-        summary: json["summary"],
-        icon: iconValues.map[json["icon"]],
-        data: List<Datum>.from(json["data"].map((x) => Datum.fromJson(x))),
+        pop: json["pop"]?.toDouble(),
+        rain: json["rain"]?.toDouble(),
+        dt: json["dt"],
+        temp: Temp.fromJson(json["temp"]),
+        humidity: json["humidity"],
+        sunrise: json["sunrise"],
+        sunset: json["sunset"],
+        uvi: json["uvi"]?.toDouble(),
+        moonPhase: json["moon_phase"]?.toDouble(),
+        windDeg: json["wind_deg"],
+        windGust: json["wind_gust"]?.toDouble(),
+        moonset: json["moonset"],
+        feelsLike: FeelsLike.fromJson(json["feels_like"]),
+        weather: List<WeatherElement>.from(json["weather"].map((x) => WeatherElement.fromJson(x))),
+        windSpeed: json["wind_speed"]?.toDouble(),
+        pressure: json["pressure"],
+        moonrise: json["moonrise"],
+        dewPoint: json["dew_point"]?.toDouble(),
+        clouds: json["clouds"],
       );
 
   Map<String, dynamic> toJson() => {
-        "summary": summary,
-        "icon": iconValues.reverse[icon],
-        "data": List<dynamic>.from(data.map((x) => x.toJson())),
-      };
-}
-
-class Datum {
-  Datum({
-    required this.time,
-    required this.summary,
-    required this.icon,
-    required this.sunriseTime,
-    required this.sunsetTime,
-    required this.moonPhase,
-    required this.precipIntensity,
-    required this.precipIntensityMax,
-    this.precipIntensityMaxTime,
-    required this.precipProbability,
-    required this.temperatureHigh,
-    required this.temperatureHighTime,
-    required this.temperatureLow,
-    required this.temperatureLowTime,
-    required this.apparentTemperatureHigh,
-    required this.apparentTemperatureHighTime,
-    required this.apparentTemperatureLow,
-    required this.apparentTemperatureLowTime,
-    required this.dewPoint,
-    required this.humidity,
-    required this.pressure,
-    required this.windSpeed,
-    required this.windGust,
-    required this.windGustTime,
-    required this.windBearing,
-    required this.cloudCover,
-    required this.uvIndex,
-    required this.uvIndexTime,
-    required this.visibility,
-    required this.ozone,
-    required this.temperatureMin,
-    required this.temperatureMinTime,
-    required this.temperatureMax,
-    required this.temperatureMaxTime,
-    required this.apparentTemperatureMin,
-    required this.apparentTemperatureMinTime,
-    required this.apparentTemperatureMax,
-    required this.apparentTemperatureMaxTime,
-  });
-
-  int time;
-  String summary;
-  String icon;
-  int sunriseTime;
-  int sunsetTime;
-  double moonPhase;
-  num precipIntensity;
-  double precipIntensityMax;
-  int? precipIntensityMaxTime;
-  num precipProbability;
-  double temperatureHigh;
-  int temperatureHighTime;
-  double temperatureLow;
-  int temperatureLowTime;
-  double apparentTemperatureHigh;
-  int apparentTemperatureHighTime;
-  double apparentTemperatureLow;
-  int apparentTemperatureLowTime;
-  double dewPoint;
-  double humidity;
-  double pressure;
-  double windSpeed;
-  double windGust;
-  int windGustTime;
-  int windBearing;
-  double cloudCover;
-  int uvIndex;
-  int uvIndexTime;
-  num visibility;
-  double ozone;
-  double temperatureMin;
-  int temperatureMinTime;
-  double temperatureMax;
-  int temperatureMaxTime;
-  double apparentTemperatureMin;
-  int apparentTemperatureMinTime;
-  double apparentTemperatureMax;
-  int apparentTemperatureMaxTime;
-
-  factory Datum.fromJson(Map<String, dynamic> json) => Datum(
-        time: json["time"],
-        summary: json["summary"],
-        icon: json["icon"],
-        sunriseTime: json["sunriseTime"],
-        sunsetTime: json["sunsetTime"],
-        moonPhase: json["moonPhase"]?.toDouble(),
-        precipIntensity: json["precipIntensity"],
-        precipIntensityMax: json["precipIntensityMax"]?.toDouble(),
-        precipIntensityMaxTime: json["precipIntensityMaxTime"],
-        precipProbability: json["precipProbability"]?.toDouble(),
-        temperatureHigh: json["temperatureHigh"]?.toDouble(),
-        temperatureHighTime: json["temperatureHighTime"],
-        temperatureLow: json["temperatureLow"]?.toDouble(),
-        temperatureLowTime: json["temperatureLowTime"],
-        apparentTemperatureHigh: json["apparentTemperatureHigh"]?.toDouble(),
-        apparentTemperatureHighTime: json["apparentTemperatureHighTime"],
-        apparentTemperatureLow: json["apparentTemperatureLow"]?.toDouble(),
-        apparentTemperatureLowTime: json["apparentTemperatureLowTime"],
-        dewPoint: json["dewPoint"]?.toDouble(),
-        humidity: json["humidity"]?.toDouble(),
-        pressure: json["pressure"]?.toDouble(),
-        windSpeed: json["windSpeed"]?.toDouble(),
-        windGust: json["windGust"]?.toDouble(),
-        windGustTime: json["windGustTime"],
-        windBearing: json["windBearing"],
-        cloudCover: json["cloudCover"]?.toDouble(),
-        uvIndex: json["uvIndex"],
-        uvIndexTime: json["uvIndexTime"],
-        visibility: json["visibility"],
-        ozone: json["ozone"]?.toDouble(),
-        temperatureMin: json["temperatureMin"]?.toDouble(),
-        temperatureMinTime: json["temperatureMinTime"],
-        temperatureMax: json["temperatureMax"]?.toDouble(),
-        temperatureMaxTime: json["temperatureMaxTime"],
-        apparentTemperatureMin: json["apparentTemperatureMin"]?.toDouble(),
-        apparentTemperatureMinTime: json["apparentTemperatureMinTime"],
-        apparentTemperatureMax: json["apparentTemperatureMax"]?.toDouble(),
-        apparentTemperatureMaxTime: json["apparentTemperatureMaxTime"],
-      );
-
-  Map<String, dynamic> toJson() => {
-        "time": time,
-        "summary": summary,
-        "icon": icon,
-        "sunriseTime": sunriseTime,
-        "sunsetTime": sunsetTime,
-        "moonPhase": moonPhase,
-        "precipIntensity": precipIntensity,
-        "precipIntensityMax": precipIntensityMax,
-        "precipIntensityMaxTime": precipIntensityMaxTime,
-        "precipProbability": precipProbability,
-        "temperatureHigh": temperatureHigh,
-        "temperatureHighTime": temperatureHighTime,
-        "temperatureLow": temperatureLow,
-        "temperatureLowTime": temperatureLowTime,
-        "apparentTemperatureHigh": apparentTemperatureHigh,
-        "apparentTemperatureHighTime": apparentTemperatureHighTime,
-        "apparentTemperatureLow": apparentTemperatureLow,
-        "apparentTemperatureLowTime": apparentTemperatureLowTime,
-        "dewPoint": dewPoint,
+        "pop": pop,
+        "rain": rain,
+        "dt": dt,
+        "temp": temp.toJson(),
         "humidity": humidity,
+        "sunrise": sunrise,
+        "sunset": sunset,
+        "uvi": uvi,
+        "moon_phase": moonPhase,
+        "wind_deg": windDeg,
+        "wind_gust": windGust,
+        "moonset": moonset,
+        "feels_like": feelsLike.toJson(),
+        "weather": List<dynamic>.from(weather.map((x) => x.toJson())),
+        "wind_speed": windSpeed,
         "pressure": pressure,
-        "windSpeed": windSpeed,
-        "windGust": windGust,
-        "windGustTime": windGustTime,
-        "windBearing": windBearing,
-        "cloudCover": cloudCover,
-        "uvIndex": uvIndex,
-        "uvIndexTime": uvIndexTime,
-        "visibility": visibility,
-        "ozone": ozone,
-        "temperatureMin": temperatureMin,
-        "temperatureMinTime": temperatureMinTime,
-        "temperatureMax": temperatureMax,
-        "temperatureMaxTime": temperatureMaxTime,
-        "apparentTemperatureMin": apparentTemperatureMin,
-        "apparentTemperatureMinTime": apparentTemperatureMinTime,
-        "apparentTemperatureMax": apparentTemperatureMax,
-        "apparentTemperatureMaxTime": apparentTemperatureMaxTime,
+        "moonrise": moonrise,
+        "dew_point": dewPoint,
+        "clouds": clouds,
       };
 }
 
-class Hourly {
-  Hourly({
-    required this.summary,
-    required this.icon,
-    required this.data,
+class FeelsLike {
+  double night;
+  double eve;
+  double day;
+  double morn;
+
+  FeelsLike({
+    required this.night,
+    required this.eve,
+    required this.day,
+    required this.morn,
   });
 
-  String summary;
-  Icon? icon;
-  List<Currently> data;
-
-  factory Hourly.fromJson(Map<String, dynamic> json) => Hourly(
-        summary: json["summary"],
-        icon: iconValues.map[json["icon"]],
-        data: List<Currently>.from(json["data"].map((x) => Currently.fromJson(x))),
+  factory FeelsLike.fromJson(Map<String, dynamic> json) => FeelsLike(
+        night: json["night"]?.toDouble(),
+        eve: json["eve"]?.toDouble(),
+        day: json["day"]?.toDouble(),
+        morn: json["morn"]?.toDouble(),
       );
 
   Map<String, dynamic> toJson() => {
-        "summary": summary,
-        "icon": iconValues.reverse[icon],
-        "data": List<dynamic>.from(data.map((x) => x.toJson())),
+        "night": night,
+        "eve": eve,
+        "day": day,
+        "morn": morn,
+      };
+}
+
+class Temp {
+  double night;
+  double min;
+  double eve;
+  double day;
+  double max;
+  double morn;
+
+  Temp({
+    required this.night,
+    required this.min,
+    required this.eve,
+    required this.day,
+    required this.max,
+    required this.morn,
+  });
+
+  factory Temp.fromJson(Map<String, dynamic> json) => Temp(
+        night: json["night"]?.toDouble(),
+        min: json["min"]?.toDouble(),
+        eve: json["eve"]?.toDouble(),
+        day: json["day"]?.toDouble(),
+        max: json["max"]?.toDouble(),
+        morn: json["morn"]?.toDouble(),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "night": night,
+        "min": min,
+        "eve": eve,
+        "day": day,
+        "max": max,
+        "morn": morn,
       };
 }
 
