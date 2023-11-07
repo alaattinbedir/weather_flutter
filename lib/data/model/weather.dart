@@ -10,7 +10,6 @@ String weatherToJson(Weather data) => json.encode(data.toJson());
 
 class Weather {
   List<Current> hourly;
-  List<Alert> alerts;
   Current current;
   int timezoneOffset;
   List<Daily> daily;
@@ -20,7 +19,6 @@ class Weather {
 
   Weather({
     required this.hourly,
-    required this.alerts,
     required this.current,
     required this.timezoneOffset,
     required this.daily,
@@ -31,7 +29,6 @@ class Weather {
 
   factory Weather.fromJson(Map<String, dynamic> json) => Weather(
         hourly: List<Current>.from(json["hourly"].map((x) => Current.fromJson(x))),
-        alerts: List<Alert>.from(json["alerts"].map((x) => Alert.fromJson(x))),
         current: Current.fromJson(json["current"]),
         timezoneOffset: json["timezone_offset"],
         daily: List<Daily>.from(json["daily"].map((x) => Daily.fromJson(x))),
@@ -42,49 +39,12 @@ class Weather {
 
   Map<String, dynamic> toJson() => {
         "hourly": List<dynamic>.from(hourly.map((x) => x.toJson())),
-        "alerts": List<dynamic>.from(alerts.map((x) => x.toJson())),
         "current": current.toJson(),
         "timezone_offset": timezoneOffset,
         "daily": List<dynamic>.from(daily.map((x) => x.toJson())),
         "lon": lon,
         "timezone": timezone,
         "lat": lat,
-      };
-}
-
-class Alert {
-  String senderName;
-  List<String> tags;
-  int end;
-  String event;
-  String description;
-  int start;
-
-  Alert({
-    required this.senderName,
-    required this.tags,
-    required this.end,
-    required this.event,
-    required this.description,
-    required this.start,
-  });
-
-  factory Alert.fromJson(Map<String, dynamic> json) => Alert(
-        senderName: json["sender_name"],
-        tags: List<String>.from(json["tags"].map((x) => x)),
-        end: json["end"],
-        event: json["event"],
-        description: json["description"],
-        start: json["start"],
-      );
-
-  Map<String, dynamic> toJson() => {
-        "sender_name": senderName,
-        "tags": List<dynamic>.from(tags.map((x) => x)),
-        "end": end,
-        "event": event,
-        "description": description,
-        "start": start,
       };
 }
 
@@ -103,9 +63,9 @@ class Current {
   double windSpeed;
   int pressure;
   double dewPoint;
-  Rain? rain;
   double? windGust;
   double? pop;
+  Rain? rain;
 
   Current({
     required this.dt,
@@ -122,9 +82,9 @@ class Current {
     required this.windSpeed,
     required this.pressure,
     required this.dewPoint,
-    this.rain,
     this.windGust,
     this.pop,
+    this.rain,
   });
 
   factory Current.fromJson(Map<String, dynamic> json) => Current(
@@ -142,9 +102,9 @@ class Current {
         windSpeed: json["wind_speed"]?.toDouble(),
         pressure: json["pressure"],
         dewPoint: json["dew_point"]?.toDouble(),
-        rain: json["rain"] == null ? null : Rain.fromJson(json["rain"]),
         windGust: json["wind_gust"]?.toDouble(),
         pop: json["pop"]?.toDouble(),
+        rain: json["rain"] == null ? null : Rain.fromJson(json["rain"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -162,9 +122,9 @@ class Current {
         "wind_speed": windSpeed,
         "pressure": pressure,
         "dew_point": dewPoint,
-        "rain": rain?.toJson(),
         "wind_gust": windGust,
         "pop": pop,
+        "rain": rain?.toJson(),
       };
 }
 
@@ -212,13 +172,14 @@ class WeatherElement {
       };
 }
 
-enum Description { BROKEN_CLOUDS, CLEAR_SKY, FEW_CLOUDS, LIGHT_RAIN, OVERCAST_CLOUDS, SCATTERED_CLOUDS }
+enum Description { BROKEN_CLOUDS, CLEAR_SKY, FEW_CLOUDS, LIGHT_RAIN, MODERATE_RAIN, OVERCAST_CLOUDS, SCATTERED_CLOUDS }
 
 final descriptionValues = EnumValues({
   "broken clouds": Description.BROKEN_CLOUDS,
   "clear sky": Description.CLEAR_SKY,
   "few clouds": Description.FEW_CLOUDS,
   "light rain": Description.LIGHT_RAIN,
+  "moderate rain": Description.MODERATE_RAIN,
   "overcast clouds": Description.OVERCAST_CLOUDS,
   "scattered clouds": Description.SCATTERED_CLOUDS
 });
